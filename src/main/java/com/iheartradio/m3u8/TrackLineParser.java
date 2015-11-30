@@ -16,6 +16,7 @@ class TrackLineParser implements LineParser {
                 .withUri(line)
                 .withTrackInfo(mediaState.trackInfo)
                 .withEncryptionData(mediaState.encryptionData)
+                .isDiscontinutyExists(mediaState.discontinutyExists)
                 .build());
 
         mediaState.trackInfo = null;

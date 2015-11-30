@@ -34,4 +34,31 @@ public class M3uParserTest {
 
         assertEquals(expectedTracks, mediaPlaylist.getTracks());
     }
+    
+    @Test
+    public void discontinuityParse() throws Exception {
+        final String absolute = "http://www.my.song/file1.mp3";
+        final String relative = "user1/file2.mp3";
+
+        final String validData =
+                        "#some comment\n" +
+                        absolute + "\n" +
+                        "\n" +
+                        "#EXT-X-DISCONTINUITY" +
+                        "\n" +
+                        relative + "\n" +
+                        "\n";
+
+        final List<TrackData> expectedTracks = Arrays.asList(
+                new TrackData.Builder().withUri(absolute).isDiscontinutyExists(true).build(),
+                new TrackData.Builder().withUri(relative).build());
+
+        final InputStream inputStream = new ByteArrayInputStream(validData.getBytes("utf-8"));
+        final MediaPlaylist mediaPlaylist = new M3uParser(inputStream, Encoding.UTF_8).parse().getMediaPlaylist();
+
+        System.out.println(Arrays.toString(expectedTracks.toArray()));
+        
+        assertEquals(expectedTracks, mediaPlaylist.getTracks());
+    }
+    
 }

@@ -30,7 +30,8 @@ class ExtendedM3uParser extends BaseM3uParser {
                 MasterPlaylistLineParser.EXT_X_STREAM_INF,
                 MasterPlaylistLineParser.EXT_X_I_FRAME_STREAM_INF,
                 MediaPlaylistLineParser.EXTINF,
-                MediaPlaylistLineParser.EXT_X_ENDLIST
+                MediaPlaylistLineParser.EXT_X_ENDLIST,
+                MediaPlaylistLineParser.EXT_X_DISCONTINUITY
         );
     }
 
@@ -74,6 +75,7 @@ class ExtendedM3uParser extends BaseM3uParser {
                         playlistParser.parse(line, state);
                     } else if (state.isMedia()) {
                         trackLineParser.parse(line, state);
+                        state.getMedia().discontinutyExists = false;
                     } else {
                         throw ParseException.create(ParseExceptionType.UNKNOWN_PLAYLIST_TYPE, line);
                     }
